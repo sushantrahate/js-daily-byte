@@ -2,7 +2,7 @@
 
 Daily JavaScript concepts. Automated.
 
-JS Daily Byte is a zero-server Telegram bot powered by GitHub Actions that posts one JavaScript quote every day to the **JS Daily Byte** group.
+JS Daily Byte is a zero-server Telegram bot powered by GitHub Actions that posts one JavaScript quote every day to the **JS Daily Byte** channel.
 
 ## 🔗 DEV Article
 
@@ -10,7 +10,7 @@ https://dev.to/sushantrahate/js-daily-byte-a-daily-javascript-quote-bot-built-wi
 
 ## 💬 Live
 
-Telegram Group: https://t.me/jsdailybyte
+Telegram Channel: https://t.me/jsdailybyte
 
 ## 🧠 Example Message
 
