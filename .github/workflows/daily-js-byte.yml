@@ -14,7 +14,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Pick quote of the day (IST)
+      - name: Pick quote of the day (UTC)
         run: |
           node - <<'NODE'
           const fs = require("fs");
@@ -24,17 +24,12 @@ jobs:
             throw new Error("quotes.json must be a non-empty array of strings");
           }
 
-          // Get YYYY-MM-DD in Asia/Kolkata (IST)
-          const istDate = new Intl.DateTimeFormat("en-CA", {
-            timeZone: "Asia/Kolkata",
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-          }).format(new Date());
+          // Get YYYY-MM-DD in UTC (global consistent)
+          const utcDate = new Date().toISOString().slice(0, 10);
 
-          // Deterministic hash based on IST date
+          // Deterministic hash based on UTC date
           let hash = 0;
-          for (const ch of istDate) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
+          for (const ch of utcDate) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
 
           const idx = hash % quotes.length;
           const quote = quotes[idx];
@@ -54,7 +49,7 @@ jobs:
           const message = `🟡 <b>JS Daily Byte</b>\n\n“${esc(quote)}”`;
           fs.writeFileSync("quote.txt", message, "utf8");
 
-          console.log(`Picked quote #${idx} for IST date ${istDate}`);
+          console.log(`Picked quote #${idx} for UTC date ${utcDate}`);
           NODE
 
       - name: Send to Telegram
