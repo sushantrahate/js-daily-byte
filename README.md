@@ -1,30 +1,49 @@
-# 🟡 JS Daily Byte
+# 🚀 JS Daily Byte
 
-Daily JavaScript learning. Delivered automatically to our Telegram group.
+Daily JavaScript concepts. Automated.
 
-JS Daily Byte is a GitHub Actions powered bot that sends one JavaScript quote every day at a globally balanced time to the **JS Daily Byte** Telegram group.
+JS Daily Byte is a zero-server Telegram bot powered by GitHub Actions that posts one JavaScript quote every day to the **JS Daily Byte** group.
 
-Built for consistency.  
-Built for habit.  
-Built for community.
+## 🔗 DEV Article
 
----
+https://dev.to/sushantrahate/js-daily-byte-a-daily-javascript-quote-bot-built-with-github-actions-pol
 
-## 🚀 What It Does
+## 💬 Live
 
-- Picks a deterministic quote of the day
-- Uses UTC for global consistency
-- Sends it to Telegram via Bot API
-- Runs automatically using GitHub Actions cron
-- No server required
-- No hosting cost
-
----
+Telegram Group: https://t.me/jsdailybyte
 
 ## 🧠 Example Message
 
 ```
 🟡 JS Daily Byte
 
-“Everything in JavaScript happens inside the Execution Context.”
+“Every JavaScript program runs inside an execution context with two
+phases: memory creation and code execution.”
 ```
+
+## ⚙️ How It Works
+
+1. Reads `quotes.json` (array of JavaScript concepts)
+2. Generates a deterministic index using the current UTC date
+3. Selects the corresponding quote
+4. Escapes HTML for Telegram-safe formatting
+5. Sends the message using the Telegram Bot API via `curl`
+
+## 🏗 Tech Stack
+
+- GitHub Actions (daily scheduler)
+- Node.js (inline workflow script)
+- Telegram Bot API
+- JSON-based quote storage
+
+## ⏱ Under 30 Minutes to Build
+
+No database.  
+No server.  
+No maintenance.
+
+A Telegram bot.  
+A JSON file.  
+A GitHub Action.
+
+If you liked it then please show your love by ⭐ the repo
