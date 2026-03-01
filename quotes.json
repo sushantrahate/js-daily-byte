@@ -1,0 +1,7 @@
+[
+  "Everything in JavaScript happens inside the Execution Context.",
+  "The Execution Context has two components: Memory and Code.",
+  "Memory stores variables and functions as key-value pairs.",
+  "The call stack works on LIFO principle.",
+  "Closures remember their lexical environment."
+]

@@ -1,0 +1,75 @@
+name: JS Daily Byte
+
+on:
+  schedule:
+    # 13:00 UTC (Balanced global time)
+    - cron: '0 13 * * *'
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Pick quote of the day (IST)
+        run: |
+          node - <<'NODE'
+          const fs = require("fs");
+
+          const quotes = JSON.parse(fs.readFileSync("quotes.json", "utf8"));
+          if (!Array.isArray(quotes) || quotes.length === 0) {
+            throw new Error("quotes.json must be a non-empty array of strings");
+          }
+
+          // Get YYYY-MM-DD in Asia/Kolkata (IST)
+          const istDate = new Intl.DateTimeFormat("en-CA", {
+            timeZone: "Asia/Kolkata",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          }).format(new Date());
+
+          // Deterministic hash based on IST date
+          let hash = 0;
+          for (const ch of istDate) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
+
+          const idx = hash % quotes.length;
+          const quote = quotes[idx];
+
+          if (typeof quote !== "string" || !quote.trim()) {
+            throw new Error("Each quote must be a non-empty string");
+          }
+
+          // Escape for Telegram HTML
+          const esc = (s) =>
+            String(s)
+              .replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;")
+              .replace(/"/g, "&quot;");
+
+          const message = `🟡 <b>JS Daily Byte</b>\n\n“${esc(quote)}”`;
+          fs.writeFileSync("quote.txt", message, "utf8");
+
+          console.log(`Picked quote #${idx} for IST date ${istDate}`);
+          NODE
+
+      - name: Send to Telegram
+        env:
+          BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+        run: |
+          if [ -z "$BOT_TOKEN" ] || [ -z "$CHAT_ID" ]; then
+            echo "Missing TG_BOT_TOKEN or TG_CHAT_ID secrets"
+            exit 1
+          fi
+
+          TEXT="$(cat quote.txt)"
+
+          curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+            -d "chat_id=${CHAT_ID}" \
+            -d "parse_mode=HTML" \
+            --data-urlencode "text=${TEXT}"
